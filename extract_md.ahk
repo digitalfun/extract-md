@@ -145,11 +145,11 @@ sub: *Main*
 *******************
 
 ###parameters
--b
+
 ###returns
--b
+
 ###description
--b
+
 ###usage
 	Gosub Main -b
 
