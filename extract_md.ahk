@@ -199,7 +199,10 @@ Main:
 	;------------------------------
 	; add header H1 "Projectname"
 	;------------------------------
+	if( PROJECTNAME <> "") 
+	{
 		sContent = <h1 class="mdprojectname">%PROJECTNAME%</h1>`n
+	}
 	
 	Loop %filesCount%  
 	{
