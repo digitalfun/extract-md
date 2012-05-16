@@ -25,7 +25,7 @@ file: *extract_md.ahk*
 *******************
 
 ###history
-* v1.0 2012-05-14: initial-b
+* v1.0 2012-05-16: initial-b
 initial release
 
 ###description
