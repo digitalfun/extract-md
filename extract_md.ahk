@@ -214,7 +214,7 @@ Return
 
 /*md*
 <div class="mdfunction">
-sub-procedure: *LoadSettings*
+subroutine: *LoadSettings*
 ---------------------------
 > **syntax:** *LoadSettings*-b
 > **version:** 1.0
