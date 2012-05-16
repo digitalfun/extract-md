@@ -240,6 +240,55 @@ Return
 
 /*md*
 <div class="mdfunction">
+sub: *loadINI*
+---------------------------
+> **syntax:** *loadINI*-b
+> **version:** 1.0
+
+*******************
+
+> **author:** Florian SCHMID-b
+> **added in project version:** 1.0
+
+*******************
+
+###parameters
+
+###returns
+
+###description
+Loads custom user settings from INI-file.-b
+
+###usage
+	Gosub loadINI
+
+###info
+For more information about the INI format, look in the File description.-b
+
+</div> */
+
+loadINI:
+
+	;INI-Filename: <name of .exe or .ahk>.ini
+	SplitPath, A_ScriptName, , , , sIniFileNameNoExt, 
+	
+	sINIFilename = %A_WorkingDir%\%sIniFileNameNoExt%.ini
+		
+	IniRead, TEXTBLOCK_START, %sINIFilename%, SETUP, BLOCK_START, %TEXTBLOCK_START%
+	IniRead, TEXTBLOCK_LINE, %sINIFilename%, SETUP, BLOCK_LINE, %TEXTBLOCK_LINE%
+	IniRead, TEXTBLOCK_END, %sINIFilename%, SETUP, BLOCK_END, %TEXTBLOCK_END%
+	IniRead, OUTPUTBLOCK_SEP, %sINIFilename%, SETUP, BLOCK_SEP, %OUTPUTBLOCK_SEP%
+	IniRead, FILE_SEP, %sINIFilename%, SETUP, FILE_SEP, %FILE_SEP%
+	IniRead, CUSTOM_BR, %sINIFilename%, SETUP, CUSTOM_BR, %CUSTOM_BR%
+	IniRead, OUTPUTFILENAME, %sINIFilename%, SETUP, OUTPUT, %OUTPUTFILENAME%
+	IniRead, PROJECTNAME, %sINIFilename%, SETUP, PROJECT, %PROJECTNAME%
+	
+Return	
+
+
+
+/*md*
+<div class="mdfunction">
 function: *extractMD*
 ---------------------------
 > **syntax:** *extractMD( in_sFile) : string*-b
@@ -384,52 +433,3 @@ extractMD( in_sFile )
 
 	Return sMDContent
 } ;end extractMD()
-
-
-
-/*md*
-<div class="mdfunction">
-sub: *loadINI*
----------------------------
-> **syntax:** *loadINI*-b
-> **version:** 1.0
-
-*******************
-
-> **author:** Florian SCHMID-b
-> **added in project version:** 1.0
-
-*******************
-
-###parameters
-
-###returns
-
-###description
-Loads custom user settings from INI-file.-b
-
-###usage
-	Gosub loadINI
-
-###info
-For more information about the INI format, look in the File description.-b
-
-</div> */
-loadINI:
-
-	;INI-Filename: <name of .exe or .ahk>.ini
-	SplitPath, A_ScriptName, , , , sIniFileNameNoExt, 
-	
-	sINIFilename = %A_WorkingDir%\%sIniFileNameNoExt%.ini
-		
-	IniRead, TEXTBLOCK_START, %sINIFilename%, SETUP, BLOCK_START, %TEXTBLOCK_START%
-	IniRead, TEXTBLOCK_LINE, %sINIFilename%, SETUP, BLOCK_LINE, %TEXTBLOCK_LINE%
-	IniRead, TEXTBLOCK_END, %sINIFilename%, SETUP, BLOCK_END, %TEXTBLOCK_END%
-	IniRead, OUTPUTBLOCK_SEP, %sINIFilename%, SETUP, BLOCK_SEP, %OUTPUTBLOCK_SEP%
-	IniRead, FILE_SEP, %sINIFilename%, SETUP, FILE_SEP, %FILE_SEP%
-	IniRead, CUSTOM_BR, %sINIFilename%, SETUP, CUSTOM_BR, %CUSTOM_BR%
-	IniRead, OUTPUTFILENAME, %sINIFilename%, SETUP, OUTPUT, %OUTPUTFILENAME%
-	IniRead, PROJECTNAME, %sINIFilename%, SETUP, PROJECT, %PROJECTNAME%
-	
-Return	
-
