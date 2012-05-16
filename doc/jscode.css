@@ -1,0 +1,90 @@
+body
+{
+	background-color:#d0e4fe;
+	font-family:Arial, Verdana, "Times New Roman", Times, serif; 
+}
+
+h1
+{
+	color:black;
+	background-color:#d0e4fe;
+}
+
+h2
+{
+	color:white;
+	background-color:blue;
+}
+
+h3
+{
+	background-color:grey;
+}
+
+h4
+{
+	text-decoration:underline;
+}
+
+code
+{
+	color:blue;
+	background-color:teal;
+}
+
+strong
+{
+	color:black;
+}
+
+
+.mdfilename
+{
+	color:blue;
+}
+
+.mdfile
+{
+	color:black;
+	background-color:#A9D0F5; /* blue */
+}
+	.mdfile h2
+	{
+		color:white;
+		background-color:#013ADF; /* blue */
+	}
+	.mdfile h3
+	{
+		color:white;
+		background-color:#0B3861; /* blue */
+	}
+
+
+
+
+
+.mdfunction 
+{
+	color:black;
+	background-color:lightcyan;
+}
+	.mdfunction h2 
+	{
+		color:black;
+		background-color:MediumSeaGreen;
+	}
+	.mdfunction h3 {
+		color:black;
+		background-color:DarkSeaGreen ;
+	}
+
+
+.mdclass
+{
+	color:black;
+	background-color:lightblue;	
+}
+	.mdclass h2 {
+		color:black;
+		background-color:LightSkyBlue;
+	}
