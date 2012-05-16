@@ -41,7 +41,7 @@ Tag for ending block.
  *standard value:* \*&#47;   
 `CUSTOM_BR`   
 If this tag is found, it will be replaced with 2 space-characters. (inducing a line-break)  
- *standard value:* &#45;br   
+ *standard value:* &#45;b   
 `BLOCK_SEP`   
 Tag that will be used to seperate 2 blocks in the output md-file.  
  *standard value:* (empty)   

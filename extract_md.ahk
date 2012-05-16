@@ -32,7 +32,7 @@ initial release
 Scriptlanguage: [AutoHotkey](http://www.autohotkey.com/ "AutoHotkey homepage").-b
 
 The aim of this tool is to extract [Markdown][link_md] textblocks
-from files and merges them into a single file.-b
+from files and merge them into a single file.-b
 The file can then be processed by a tool like [Pandoc][link_pandoc] to convert it from Markdown to a HTML page for example.
 
 ####The INI-Configuration file
@@ -100,7 +100,7 @@ MARKDOWN_BR 	:= "  "
 TEXTBLOCK_START := "/*md"
 TEXTBLOCK_LINE  :=""
 TEXTBLOCK_END   := "*/"
-CUSTOM_BR		:= "-b"
+CUSTOM_BR	:= "-b"
 OUTPUTBLOCK_SEP := ""
 FILE_SEP := "*******************"
 OUTPUTFILENAME := "output.md"
