@@ -110,55 +110,15 @@ PROJECTNAME := "project"
 MainSub:
 
 	filesCount = %0% ;number of files dropped
-	
-	Gosub loadINI
-	
-	;------------------------------
-	; store the full path+filename of the dropped file(s)
-	; into array "Files"
-	;------------------------------
-	Loop %filesCount%  ; For each parameter (or file dropped onto a script):
+
+	if( filesCount = 0)
 	{
-		GivenPath := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
-		Loop %GivenPath%, 1
-			LongPath = %A_LoopFileLongPath%
-		Files%A_Index% := LongPath
+		;Msgbox with Exclamation mark (48)
+		MsgBox, 48, Error, Please drop a file on me!
+		ExitApp
 	}
-
-
-	Gosub Main
-
-Return
-
-/*md*
-<div class="mdfunction">
-sub: *Main*
----------------------------
-> **syntax:** *Main*-b
-> **version:** 1.0
-
-*******************
-
-> **author:** Florian SCHMID-b
-> **added in project version:** 1.0
-
-*******************
-
-###parameters
-
-###returns
-
-###description
-
-###usage
-	Gosub Main -b
-
-###info
--b
-
-</div>
-*/
-Main:
+	
+	Gosub LoadSettings
 
 	;------------------------------
 	; User input: Projectname
@@ -189,13 +149,18 @@ Main:
 		OUTPUTFILENAME := UserInput		
 	}
 
+	;------------------------------
+	; store the full path+filename of the dropped file(s)
+	; into array "Files"
+	;------------------------------
+	Loop %filesCount%  ; For each parameter (or file dropped onto a script):
+	{
+		GivenPath := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
+		Loop %GivenPath%, 1
+			LongPath = %A_LoopFileLongPath%
+		Files%A_Index% := LongPath
+	}
 
-	
-	;------------------------------
-	; loop files and collect the MD content
-	;------------------------------
-	sContent = 
-	
 	;------------------------------
 	; add header H1 "Projectname"
 	;------------------------------
@@ -203,7 +168,10 @@ Main:
 	{
 		sContent = <h1 class="mdprojectname">%PROJECTNAME%</h1>`n
 	}
-	
+
+	;------------------------------
+	; loop files and collect the MD content
+	;------------------------------
 	Loop %filesCount%  
 	{
 		sFilename :=  Files%A_Index%
@@ -228,21 +196,27 @@ Main:
 	}
 	sContent := sContent . "`n`n" . sLinks
 
+
+
 	;------------------------------
 	; create the outputfile
 	;------------------------------
 	SplitPath, sFilename, , sFileDir
 	sFileMD := sFileDir . "\" . OUTPUTFILENAME
 	FileDelete, %sFileMD%
-	FileAppend, %sContent%, %sFileMD%		
+	FileAppend, %sContent%, %sFileMD%	
+
+
+
 Return
+
 
 
 /*md*
 <div class="mdfunction">
-sub: *loadINI*
+sub-procedure: *LoadSettings*
 ---------------------------
-> **syntax:** *loadINI*-b
+> **syntax:** *LoadSettings*-b
 > **version:** 1.0
 
 *******************
@@ -260,18 +234,17 @@ sub: *loadINI*
 Loads custom user settings from INI-file.-b
 
 ###usage
-	Gosub loadINI
+	Gosub LoadSettings
 
 ###info
 For more information about the INI format, look in the File description.-b
 
-</div> */
+</div> 
+*/
 
-loadINI:
-
+LoadSettings:
 	;INI-Filename: <name of .exe or .ahk>.ini
 	SplitPath, A_ScriptName, , , , sIniFileNameNoExt, 
-	
 	sINIFilename = %A_WorkingDir%\%sIniFileNameNoExt%.ini
 		
 	IniRead, TEXTBLOCK_START, %sINIFilename%, SETUP, BLOCK_START, %TEXTBLOCK_START%
@@ -282,8 +255,7 @@ loadINI:
 	IniRead, CUSTOM_BR, %sINIFilename%, SETUP, CUSTOM_BR, %CUSTOM_BR%
 	IniRead, OUTPUTFILENAME, %sINIFilename%, SETUP, OUTPUT, %OUTPUTFILENAME%
 	IniRead, PROJECTNAME, %sINIFilename%, SETUP, PROJECT, %PROJECTNAME%
-	
-Return	
+Return
 
 
 
@@ -431,5 +403,6 @@ extractMD( in_sFile )
 		sFileContent =  
 	}	
 
-	Return sMDContent
-} ;end extractMD()
+Return sMDContent
+} 
+;end extractMD()
