@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 file: *extract_md.ahk*
 ---------------------------
 > Type: _AutoHotkey_ (Version 1.0.48.05)-b
-> **file version:** 1.1-b
+> **file version:** 1.2-b
 > License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
@@ -25,6 +25,7 @@ file: *extract_md.ahk*
 *******************
 
 ###history
+* v1.2 2012-05-19: fixed bug: reference links didnt work when the path or filename contained a space.
 * v1.1 2012-05-19: fixed bug with BLOCK_LINE didnt remove the last char.
 * v1.0 2012-05-16: initial-b
 initial release
@@ -208,7 +209,14 @@ MainSub:
 	{
 		sFilename :=  Files%A_Index%
 		SplitPath, sFilename, sFileNameNoPath
+
+		; Replace all spaces with "%20"
+		sSpaceReplace := "%20"
+		StringReplace, sFilename, sFilename, %A_SPACE%, %sSpaceReplace%, All
+
+		; Create link-entry
 		sLinks = %sLinks%`n[filelink_%A_Index%]: file:///%sFilename%    "%sFileNameNoPath%"`n
+		
 	}
 	sContent := sContent . "`n`n" . sLinks
 
@@ -217,6 +225,7 @@ MainSub:
 	;------------------------------
 	; create the outputfile
 	;------------------------------
+	sFilename :=  Files1
 	SplitPath, sFilename, , sFileDir
 	sFileMD := sFileDir . "\" . OUTPUTFILENAME
 	FileDelete, %sFileMD%
