@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 file: *extract_md.ahk*
 ---------------------------
 > Type: _AutoHotkey_ (Version 1.0.48.05)-b
-> **file version:** 1.0-b
+> **file version:** 1.1-b
 > License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
@@ -25,6 +25,7 @@ file: *extract_md.ahk*
 *******************
 
 ###history
+* v1.1 2012-05-19: fixed bug with BLOCK_LINE didnt remove the last char.
 * v1.0 2012-05-16: initial-b
 initial release
 
@@ -363,7 +364,7 @@ extractMD( in_sFile )
 					; -> found!
 					if( sLineStart == TEXTBLOCK_LINE)
 					{
-						sLine := SubStr( sLine, nLinetag_len)
+						sLine := SubStr( sLine, nLinetag_len +1)
 					}	
 				}
 			
