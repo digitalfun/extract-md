@@ -34,7 +34,14 @@ Scriptlanguage: [AutoHotkey](http://www.autohotkey.com/ "AutoHotkey homepage").-
 
 The aim of this tool is to extract [Markdown][link_md] textblocks
 from files and merge them into a single file.-b
-The file can then be processed by a tool like [Pandoc][link_pandoc] to convert it from Markdown to a HTML page for example.
+The file can then be processed by a tool like [Pandoc][link_pandoc] to convert it from Markdown into a HTML page for example.
+
+###Usage
+1. Setup the INI-file to fit your needs -b
+2. drag and drop the file(s) onto the .exe -b
+3. enter the name of the project (= level 1 header) -b
+4. enter the name of the output-file -b
+
 
 ####The INI-Configuration file
 The **INI-File** looks like this:-b
@@ -51,27 +58,35 @@ The **INI-File** looks like this:-b
 
 #####Details
 `BLOCK_START` -b
-Tag for starting block. -b
+Tag to identify the **start** of a block. -b
  *standard value:* &#47;\*md -b
+ 
 `BLOCK_LINE` -b
 If a line inside the block starts with this string it will be removed from the line.-b
  *standard value:* (empty) -b
+ 
 `BLOCK_END` -b
-Tag for ending block. -b
+Tag to identify the **end** of a block. -b
  *standard value:* \*&#47; -b
+ 
 `CUSTOM_BR` -b
 If this tag is found, it will be replaced with 2 space-characters. (inducing a line-break)-b
- *standard value:* &#45;br -b
+ *standard value:* &#45;b -b
+ 
 `BLOCK_SEP` -b
 Tag that will be used to seperate 2 blocks in the output md-file.-b
  *standard value:* (empty) -b
+ 
 `FILE_SEP` -b
 Tag that will be used to seperate 2 files in the output md-file.-b
  *standard value:* ******************* -b
+ 
 `OUTPUT` -b
 Default filename in the file-selection dialog.-b
  *standard value:* output.md -b
  
+_**Tip:** to use "space" in a tag, surround the string with quotation marks (")_
+
 [link_md]: http://daringfireball.net/projects/markdown/ "Markdown Homepage"
 [link_pandoc]: http://johnmacfarlane.net/pandoc/ "Pandoc Homepage"
 
