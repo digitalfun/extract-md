@@ -55,7 +55,7 @@ Tag for starting block. -b
  *standard value:* &#47;\*md -b
 `BLOCK_LINE` -b
 If a line inside the block starts with this string it will be removed from the line.-b
- *standard value:* \* -b
+ *standard value:* (empty) -b
 `BLOCK_END` -b
 Tag for ending block. -b
  *standard value:* \*&#47; -b
