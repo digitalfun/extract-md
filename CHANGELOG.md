@@ -1,6 +1,6 @@
 Version 1.2
 ===========
-Date of release: 2012-05-xx
+Date of release: 2012-05-21
 
 * fixed bug: reference links didnt work when the path or filename contained a space.
 
