@@ -111,6 +111,8 @@ SetWorkingDir %A_ScriptDir%
 ; Application settings
 ;------------------------------
 
+APPNAME			:= "extract-md"
+VERSION			:= "1.2"
 MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
@@ -140,7 +142,7 @@ MainSub:
 	;------------------------------
 	; User input: Projectname
 	;------------------------------
-	InputBox, UserInput, Output Filename, Please enter a Project name.,,,,,,,,%PROJECTNAME%
+	InputBox, UserInput, %APPNAME% %VERSION%, Please enter the name of the project:,,,,,,,,%PROJECTNAME%
 	if ErrorLevel ;clicked [CANCEL]
 	{
 		ExitApp		
@@ -155,7 +157,7 @@ MainSub:
 	;------------------------------
 	; User input: filename 
 	;------------------------------
-	InputBox, UserInput, Output Filename, Please enter a filename.,,,,,,,,%OUTPUTFILENAME%
+	InputBox, UserInput, %APPNAME% %VERSION%, Please enter the filename of the outputfile:,,,,,,,,%OUTPUTFILENAME%
 	if ErrorLevel ;clicked [CANCEL]
 	{
 		ExitApp		
