@@ -111,6 +111,8 @@ SetWorkingDir %A_ScriptDir%
 ; Application settings
 ;------------------------------
 
+APPNAME			:= "extract-md"
+VERSION			:= "1.2"
 MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
