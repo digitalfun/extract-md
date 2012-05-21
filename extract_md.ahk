@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 file: *extract_md.ahk*
 ---------------------------
 > Type: _AutoHotkey_ (Version 1.0.48.05)-b
-> **file version:** 1.1-b
+> **file version:** 1.2-b
 > License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
@@ -25,6 +25,7 @@ file: *extract_md.ahk*
 *******************
 
 ###history
+* v1.2 2012-05-19: fixed bug: reference links didnt work when the path or filename contained a space.
 * v1.1 2012-05-19: fixed bug with BLOCK_LINE didnt remove the last char.
 * v1.0 2012-05-16: initial-b
 initial release
@@ -34,7 +35,14 @@ Scriptlanguage: [AutoHotkey](http://www.autohotkey.com/ "AutoHotkey homepage").-
 
 The aim of this tool is to extract [Markdown][link_md] textblocks
 from files and merge them into a single file.-b
-The file can then be processed by a tool like [Pandoc][link_pandoc] to convert it from Markdown to a HTML page for example.
+The file can then be processed by a tool like [Pandoc][link_pandoc] to convert it from Markdown into a HTML page for example.
+
+###Usage
+1. Setup the INI-file to fit your needs -b
+2. drag and drop the file(s) onto the .exe -b
+3. enter the name of the project (= level 1 header) -b
+4. enter the name of the output-file -b
+
 
 ####The INI-Configuration file
 The **INI-File** looks like this:-b
@@ -51,27 +59,35 @@ The **INI-File** looks like this:-b
 
 #####Details
 `BLOCK_START` -b
-Tag for starting block. -b
+Tag to identify the **start** of a block. -b
  *standard value:* &#47;\*md -b
+ 
 `BLOCK_LINE` -b
 If a line inside the block starts with this string it will be removed from the line.-b
- *standard value:* \* -b
+ *standard value:* (empty) -b
+ 
 `BLOCK_END` -b
-Tag for ending block. -b
+Tag to identify the **end** of a block. -b
  *standard value:* \*&#47; -b
+ 
 `CUSTOM_BR` -b
 If this tag is found, it will be replaced with 2 space-characters. (inducing a line-break)-b
- *standard value:* &#45;br -b
+ *standard value:* &#45;b -b
+ 
 `BLOCK_SEP` -b
 Tag that will be used to seperate 2 blocks in the output md-file.-b
  *standard value:* (empty) -b
+ 
 `FILE_SEP` -b
 Tag that will be used to seperate 2 files in the output md-file.-b
  *standard value:* ******************* -b
+ 
 `OUTPUT` -b
 Default filename in the file-selection dialog.-b
  *standard value:* output.md -b
  
+_**Tip:** to use "space" in a tag, surround the string with quotation marks (")_
+
 [link_md]: http://daringfireball.net/projects/markdown/ "Markdown Homepage"
 [link_pandoc]: http://johnmacfarlane.net/pandoc/ "Pandoc Homepage"
 
@@ -95,6 +111,8 @@ SetWorkingDir %A_ScriptDir%
 ; Application settings
 ;------------------------------
 
+APPNAME			:= "extract-md"
+VERSION			:= "1.2"
 MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
@@ -124,7 +142,7 @@ MainSub:
 	;------------------------------
 	; User input: Projectname
 	;------------------------------
-	InputBox, UserInput, Output Filename, Please enter a Project name.,,,,,,,,%PROJECTNAME%
+	InputBox, UserInput, %APPNAME% %VERSION%, Please enter the name of the project:,,,,,,,,%PROJECTNAME%
 	if ErrorLevel ;clicked [CANCEL]
 	{
 		ExitApp		
@@ -139,7 +157,7 @@ MainSub:
 	;------------------------------
 	; User input: filename 
 	;------------------------------
-	InputBox, UserInput, Output Filename, Please enter a filename.,,,,,,,,%OUTPUTFILENAME%
+	InputBox, UserInput, %APPNAME% %VERSION%, Please enter the filename of the outputfile:,,,,,,,,%OUTPUTFILENAME%
 	if ErrorLevel ;clicked [CANCEL]
 	{
 		ExitApp		
@@ -193,7 +211,14 @@ MainSub:
 	{
 		sFilename :=  Files%A_Index%
 		SplitPath, sFilename, sFileNameNoPath
+
+		; Replace all spaces with "%20"
+		sSpaceReplace := "%20"
+		StringReplace, sFilename, sFilename, %A_SPACE%, %sSpaceReplace%, All
+
+		; Create link-entry
 		sLinks = %sLinks%`n[filelink_%A_Index%]: file:///%sFilename%    "%sFileNameNoPath%"`n
+		
 	}
 	sContent := sContent . "`n`n" . sLinks
 
@@ -202,6 +227,7 @@ MainSub:
 	;------------------------------
 	; create the outputfile
 	;------------------------------
+	sFilename :=  Files1
 	SplitPath, sFilename, , sFileDir
 	sFileMD := sFileDir . "\" . OUTPUTFILENAME
 	FileDelete, %sFileMD%
