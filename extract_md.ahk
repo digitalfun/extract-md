@@ -25,7 +25,7 @@ file: *extract_md.ahk*
 *******************
 
 ###history
-* v1.3 2012-06-19: fixed bug: ignore leading when looking for BLOCK_LINE.
+* v1.3 2012-06-19: fixed bug: ignore leading spaces when looking for BLOCK_LINE.
 * v1.2 2012-05-19: fixed bug: reference links didnt work when the path or filename contained a space.
 * v1.1 2012-05-19: fixed bug with BLOCK_LINE didnt remove the last char.
 * v1.0 2012-05-16: initial-b
