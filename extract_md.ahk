@@ -338,8 +338,9 @@ extractMD( in_sFile )
 	
 	if not ErrorLevel  ; Successfully loaded.
 	{
-		
+		;-------------------------------------
 		;loop as long as a MD block is found
+		;-------------------------------------
 		nPosStart := InStr( sFileContent, TEXTBLOCK_START, false, 1)
 		while nPosStart
 		{
@@ -366,24 +367,21 @@ extractMD( in_sFile )
 				Return ""
 			}
 			
-			;
-			; remove trailing tags (=TEXTBLOCK_LINE)
+			;-------------------------------------
+			; remove leading tags (=TEXTBLOCK_LINE)
 			; from each line
 			;
-			sMDContent_new =
-			
-			;loop line by line and remove BLOCK_LINEs 
+			; loop line by line and remove BLOCK_LINEs 
 			; and replace CUSTOM_BR tags
 			;       %A_Index% : Line number 
 			;       %A_LoopField% : content
+			;-------------------------------------
+			sMDContent_new =
 			Loop, parse, sMDContent, `n, `r 
 			{
 				sLine := A_LoopField
 
-				
-				;if line start with tag, remove tag
-				;
-				
+		
 				;check for: Line-tag
 				if nLinetag_len 
 				{
@@ -421,17 +419,15 @@ extractMD( in_sFile )
 					}	
 				}
 			
-			sMDContent_new := sMDContent_new . "`n" . sLine
-			
-			
+			;append line to textblock
+			sMDContent_new := sMDContent_new . "`n" . sLine	
 			} ;loop
 		
 			sMDContent := sMDContent_new
 			sMDContent_new =
 			
-			;add block to result
+			;append textblock to result
 			sMDContent := sMDContent . "`n`n" . OUTPUTBLOCK_SEP . "`n`n"
-		
 		
 			;find next block
 			nPosStart := InStr( sFileContent, TEXTBLOCK_START, false, nPosEnd)
