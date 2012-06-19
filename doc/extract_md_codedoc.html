@@ -33,15 +33,16 @@ Extract MD
 <div class="mdfile">
 <h2 id="file-extract_md.ahk">file: <em>extract_md.ahk</em></h2>
 <blockquote>
-<p>Type: <em>AutoHotkey</em> (Version 1.0.48.05)<br /><strong>file version:</strong> 1.2<br />License: <a href="http://www.opensource.org/licenses/mit-license.php/">MIT</a></p>
+<p>Type: <em>AutoHotkey</em> (Version 1.0.48.05)<br /><strong>file version:</strong> 1.3<br />License: <a href="http://www.opensource.org/licenses/mit-license.php/">MIT</a></p>
 </blockquote>
 <hr />
 <blockquote>
-<p><strong>project:</strong> Extract Markdown (MD) code from files<br /><strong>author:</strong> Florian SCHMID<br /><strong>company:</strong> private<br /><strong>added in project version:</strong> 1.0</p>
+<p><strong>project:</strong> Extract Markdown (MD) code from files<br /><strong>author:</strong> Florian SCHMID<br /><strong>company:</strong> private<br /><strong>version:</strong> 1.3</p>
 </blockquote>
 <hr />
 <h3 id="history">history</h3>
 <ul>
+<li>v1.3 2012-06-19: fixed bug: ignore leading when looking for BLOCK_LINE.</li>
 <li>v1.2 2012-05-19: fixed bug: reference links didnt work when the path or filename contained a space.</li>
 <li>v1.1 2012-05-19: fixed bug with BLOCK_LINE didnt remove the last char.</li>
 <li>v1.0 2012-05-16: initial<br />initial release</li>
@@ -74,7 +75,6 @@ OUTPUT=&lt;filename&gt;</code></pre>
 <p><code>BLOCK_SEP</code><br />Tag that will be used to seperate 2 blocks in the output md-file.<br /> <em>standard value:</em> (empty)</p>
 <p><code>FILE_SEP</code><br />Tag that will be used to seperate 2 files in the output md-file.<br /> <em>standard value:</em> *******************</p>
 <p><code>OUTPUT</code><br />Default filename in the file-selection dialog.<br /> <em>standard value:</em> output.md</p>
-<p><em><strong>Tip:</strong> to use &quot;space&quot; in a tag, surround the string with quotation marks (&quot;)</em></p>
 </div>
 
 
@@ -106,7 +106,7 @@ OUTPUT=&lt;filename&gt;</code></pre>
 <div class="mdfunction">
 <h2 id="function-extractmd">function: <em>extractMD</em></h2>
 <blockquote>
-<p><strong>syntax:</strong> <em>extractMD( in_sFile) : string</em><br /><strong>version:</strong> 1.1</p>
+<p><strong>syntax:</strong> <em>extractMD( in_sFile) : string</em><br /><strong>version:</strong> 1.2</p>
 </blockquote>
 <hr />
 <blockquote>
@@ -119,7 +119,7 @@ OUTPUT=&lt;filename&gt;</code></pre>
 </ul>
 <h3 id="returns-1">returns</h3>
 <ul>
-<li>string<br />Returns the extracted MD-codeblock.<br />Start-, Line and End-tags are removed. Also the custom BRs are replaced.</li>
+<li>string<br />Returns the extracted MD-codeblock.<br />Removes the Start-, Line- and End-tags and also the custom BRs.</li>
 </ul>
 <h3 id="description-2">description</h3>
 <h3 id="usage-2">usage</h3>
