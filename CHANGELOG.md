@@ -1,3 +1,9 @@
+Version 1.3
+===========
+Date of release: 2012-06-19
+
+* fixed bug: leading spaces didn't work when using the BLOCK_LINE-tag.
+
 Version 1.2
 ===========
 Date of release: 2012-05-21

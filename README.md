@@ -59,8 +59,6 @@ Tag that will be used to seperate 2 files in the output md-file.
 `OUTPUT`   
 Default filename in the file-selection dialog.  
  *standard value:* output.md   
- 
-_**Tip:** to use "space" in a tag, surround the string with quotation marks (")_
 
 [link_md]: http://daringfireball.net/projects/markdown/ "Markdown Homepage"
 [link_pandoc]: http://johnmacfarlane.net/pandoc/ "Pandoc Homepage"
