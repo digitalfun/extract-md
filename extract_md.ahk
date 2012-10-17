@@ -351,7 +351,6 @@ extractMD( in_sFile )
 			
 			if nPosEnd ;get md-block from STARTPOS to ENDPOS (without start/end tags)
 			{
-				nPosEnd := nPosEnd -StrLen( TEXTBLOCK_END)
 				nLength := nPosEnd - nPosStart
 				if( nLength) 
 				{
@@ -430,6 +429,7 @@ extractMD( in_sFile )
 			sMDContent := sMDContent . "`n`n" . OUTPUTBLOCK_SEP . "`n`n"
 		
 			;find next block
+			nPosEnd := nPosEnd +StrLen( TEXTBLOCK_END)
 			nPosStart := InStr( sFileContent, TEXTBLOCK_START, false, nPosEnd)
 		} ;end while
 		
