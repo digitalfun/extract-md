@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 file: *extract_md.ahk*
 ---------------------------
 > Type: _AutoHotkey_ (Version 1.0.48.05)-b
-> **file version:** 1.3-b
+> **file version:** 1.4-b
 > License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
@@ -20,11 +20,12 @@ file: *extract_md.ahk*
 > **project:** Extract Markdown (MD) code from files-b
 > **author:** Florian SCHMID-b
 > **company:** private-b
-> **version:** 1.3-b
+> **version:** 1.4-b
 
 *******************
 
 ###history
+* v1.4 2012-10-17: fixed issue #8: dont remove chars preceding BLOCK_END-tag.
 * v1.3 2012-06-19: fixed bug: ignore leading spaces when looking for BLOCK_LINE.
 * v1.2 2012-05-19: fixed bug: reference links didnt work when the path or filename contained a space.
 * v1.1 2012-05-19: fixed bug with BLOCK_LINE didnt remove the last char.
@@ -112,7 +113,7 @@ SetWorkingDir %A_ScriptDir%
 ;------------------------------
 
 APPNAME			:= "extract-md"
-VERSION			:= "1.3"
+VERSION			:= "1.4"
 MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
@@ -351,7 +352,6 @@ extractMD( in_sFile )
 			
 			if nPosEnd ;get md-block from STARTPOS to ENDPOS (without start/end tags)
 			{
-				nPosEnd := nPosEnd -StrLen( TEXTBLOCK_END)
 				nLength := nPosEnd - nPosStart
 				if( nLength) 
 				{
@@ -430,6 +430,7 @@ extractMD( in_sFile )
 			sMDContent := sMDContent . "`n`n" . OUTPUTBLOCK_SEP . "`n`n"
 		
 			;find next block
+			nPosEnd := nPosEnd +StrLen( TEXTBLOCK_END)
 			nPosStart := InStr( sFileContent, TEXTBLOCK_START, false, nPosEnd)
 		} ;end while
 		
