@@ -2,6 +2,8 @@ Version 1.4
 ===========
 Date of release: not released yet
 
+* added issue #10: auto-linebreak option.
+
 * fixed issue #8: removing chars preceding the TEXTBLOCK_END-tag.
 
 
