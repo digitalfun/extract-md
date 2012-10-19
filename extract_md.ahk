@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 file: *extract_md.ahk*
 ---------------------------
 > Type: _AutoHotkey_ (Version 1.0.48.05)-b
-> **file version:** 1.4-b
+> **file version:** 1.5-b
 > License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
@@ -25,6 +25,7 @@ file: *extract_md.ahk*
 *******************
 
 ###history
+* v1.4 2012-10-17: added issue #???: auto linebreak (AUTO_BR).
 * v1.4 2012-10-17: fixed issue #8: dont remove chars preceding BLOCK_END-tag.
 * v1.3 2012-06-19: fixed bug: ignore leading spaces when looking for BLOCK_LINE.
 * v1.2 2012-05-19: fixed bug: reference links didnt work when the path or filename contained a space.
@@ -125,7 +126,7 @@ OUTPUTBLOCK_SEP := ""
 FILE_SEP := "*******************"
 OUTPUTFILENAME := "output.md"
 PROJECTNAME := "project"
-
+AUTO_BR := 1 ;0 = off, 1 = on
 
 MainSub:
 
@@ -245,7 +246,7 @@ Return
 subroutine: *LoadSettings*
 ---------------------------
 > **syntax:** *LoadSettings*-b
-> **version:** 1.0
+> **version:** 1.1
 
 *******************
 
@@ -283,6 +284,8 @@ LoadSettings:
 	IniRead, CUSTOM_BR, %sINIFilename%, SETUP, CUSTOM_BR, %CUSTOM_BR%
 	IniRead, OUTPUTFILENAME, %sINIFilename%, SETUP, OUTPUT, %OUTPUTFILENAME%
 	IniRead, PROJECTNAME, %sINIFilename%, SETUP, PROJECT, %PROJECTNAME%
+	IniRead, AUTO_BR, %sINIFilename%, SETUP, AUTO_BR, %AUTO_BR%
+	
 Return
 
 
@@ -292,7 +295,7 @@ Return
 function: *extractMD*
 ---------------------------
 > **syntax:** *extractMD( in_sFile) : string*-b
-> **version:** 1.2
+> **version:** 1.3
 
 *******************
 
@@ -329,6 +332,7 @@ extractMD( in_sFile )
 	global OUTPUTBLOCK_SEP
 	global CUSTOM_BR
 	global MARKDOWN_BR
+	global AUTO_BR
 	
 	FileRead, sFileContent, %in_sFile%
 	nLinetag_len := StrLen( TEXTBLOCK_LINE)
@@ -417,6 +421,16 @@ extractMD( in_sFile )
 						sLine := SubStr( sLine, 1, _length)
 						sLine :=  sLine . MARKDOWN_BR
 					}	
+					
+					;else
+					;-> add linebreak if AUTO-BR flag is set
+					else
+					{
+						if (AUTO_BR == 1)
+						{
+							sLine := sLine . MARKDOWN_BR
+						}
+					}
 				}
 			
 			;append line to textblock
