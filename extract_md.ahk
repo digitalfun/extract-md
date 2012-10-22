@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 file: *extract_md.ahk*
 ---------------------------
 > Type: _AutoHotkey_ (Version 1.0.48.05)-b
-> **file version:** 1.5-b
+> **file version:** 1.6-b
 > License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
@@ -25,7 +25,8 @@ file: *extract_md.ahk*
 *******************
 
 ###history
-* v1.4 2012-10-17: added issue #???: auto linebreak (AUTO_BR).
+* v1.4 2012-10-20: added: appname and versionno. to errormessage if no file dropped.
+* v1.4 2012-10-17: added issue #10: auto linebreak (AUTO_BR).
 * v1.4 2012-10-17: fixed issue #8: dont remove chars preceding BLOCK_END-tag.
 * v1.3 2012-06-19: fixed bug: ignore leading spaces when looking for BLOCK_LINE.
 * v1.2 2012-05-19: fixed bug: reference links didnt work when the path or filename contained a space.
@@ -135,7 +136,7 @@ MainSub:
 	if( filesCount = 0)
 	{
 		;Msgbox with Exclamation mark (48)
-		MsgBox, 48, Error, Please drop a file on me!
+		MsgBox, 48, %APPNAME% %VERSION% - Error, Please drop a file on me!
 		ExitApp
 	}
 	
