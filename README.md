@@ -26,6 +26,7 @@ The **INI-File** looks like this:
 	BLOCK_LINE=<string>
 	BLOCK_END=<string>
 	CUSTOM_BR=<string>
+	AUTO_BR=<0|1>
 	BLOCK_SEP=<string>
 	FILE_SEP=<string>
 	OUTPUT=<filename>
@@ -47,6 +48,13 @@ Tag to identify the **end** of a block.
 `CUSTOM_BR`   
 If this tag is found, it will be replaced with 2 space-characters. (inducing a line-break)  
  *standard value:* &#45;b   
+
+`AUTO_BR`   
+If this is set to __1__, it will add a line-break at the end of every line.  
+__0__ : option disabled  
+__1__ : option enabled  
+__known issues:__ The Heading "=====" and "------" will not work anymore. Use "#" and "##" instead.  
+ *standard value:* 1   
 
 `BLOCK_SEP`   
 Tag that will be used to seperate 2 blocks in the output md-file.  

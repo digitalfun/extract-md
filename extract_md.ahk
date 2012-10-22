@@ -11,43 +11,46 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <div class="mdfile">
 file: *extract_md.ahk*
 ---------------------------
-> Type: _AutoHotkey_ (Version 1.0.48.05)-b
-> **file version:** 1.3-b
+> Type: _AutoHotkey_ (Version 1.0.48.05)
+> **file version:** 1.6
 > License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
 
-> **project:** Extract Markdown (MD) code from files-b
-> **author:** Florian SCHMID-b
-> **company:** private-b
-> **version:** 1.3-b
+> **project:** Extract Markdown (MD) code from files
+> **author:** Florian SCHMID
+> **company:** private
+> **version:** 1.4
 
 *******************
 
 ###history
+* v1.4 2012-10-20: added: appname and versionno. to errormessage if no file dropped.
+* v1.4 2012-10-17: added issue #10: auto linebreak (AUTO_BR).
+* v1.4 2012-10-17: fixed issue #8: dont remove chars preceding BLOCK_END-tag.
 * v1.3 2012-06-19: fixed bug: ignore leading spaces when looking for BLOCK_LINE.
 * v1.2 2012-05-19: fixed bug: reference links didnt work when the path or filename contained a space.
 * v1.1 2012-05-19: fixed bug with BLOCK_LINE didnt remove the last char.
-* v1.0 2012-05-16: initial-b
+* v1.0 2012-05-16: initial
 initial release
 
 ###description
-Scriptlanguage: [AutoHotkey](http://www.autohotkey.com/ "AutoHotkey homepage").-b
+Scriptlanguage: [AutoHotkey](http://www.autohotkey.com/ "AutoHotkey homepage").
 
 The aim of this tool is to extract [Markdown][link_md] textblocks
-from files and merge them into a single file.-b
+from files and merge them into a single file.
 The file can then be processed by a tool like [Pandoc][link_pandoc] to convert it from Markdown into a HTML page for example.
 
 ###Usage
-1. Setup the INI-file to fit your needs -b
-2. drag and drop the file(s) onto the .exe -b
-3. enter the name of the project (= level 1 header) -b
-4. enter the name of the output-file -b
+1. Setup the INI-file to fit your needs 
+2. drag and drop the file(s) onto the .exe 
+3. enter the name of the project (= level 1 header) 
+4. enter the name of the output-file 
 
 
 ####The INI-Configuration file
-The **INI-File** looks like this:-b
-**Filename:** *\<Name of .exe or .ahk file>.ini* -b
+The **INI-File** looks like this:
+**Filename:** *\<Name of .exe or .ahk file>.ini* 
 
 	[SETUP]
 	BLOCK_START=<string>
@@ -59,33 +62,33 @@ The **INI-File** looks like this:-b
 	OUTPUT=<filename>
 
 #####Details
-`BLOCK_START` -b
-Tag to identify the **start** of a block. -b
- *standard value:* &#47;\*md -b
+`BLOCK_START` 
+Tag to identify the **start** of a block. 
+ *standard value:* &#47;\*md
  
-`BLOCK_LINE` -b
-If a line inside the block starts with this string it will be removed from the line.-b
- *standard value:* (empty) -b
+`BLOCK_LINE`
+If a line inside the block starts with this string it will be removed from the line.
+ *standard value:* (empty)
  
-`BLOCK_END` -b
-Tag to identify the **end** of a block. -b
- *standard value:* \*&#47; -b
+`BLOCK_END`
+Tag to identify the **end** of a block.
+ *standard value:* \*&#47;
  
-`CUSTOM_BR` -b
-If this tag is found, it will be replaced with 2 space-characters. (inducing a line-break)-b
- *standard value:* &#45;b -b
+`CUSTOM_BR`
+If this tag is found, it will be replaced with 2 space-characters. (inducing a line-break)
+ *standard value:* &#45;b
  
-`BLOCK_SEP` -b
-Tag that will be used to seperate 2 blocks in the output md-file.-b
- *standard value:* (empty) -b
+`BLOCK_SEP`
+Tag that will be used to seperate 2 blocks in the output md-file.
+ *standard value:* (empty)
  
-`FILE_SEP` -b
-Tag that will be used to seperate 2 files in the output md-file.-b
- *standard value:* ******************* -b
+`FILE_SEP`
+Tag that will be used to seperate 2 files in the output md-file.
+ *standard value:* *******************
  
-`OUTPUT` -b
-Default filename in the file-selection dialog.-b
- *standard value:* output.md -b
+`OUTPUT`
+Default filename in the file-selection dialog.
+ *standard value:* output.md 
  
 
 [link_md]: http://daringfireball.net/projects/markdown/ "Markdown Homepage"
@@ -112,7 +115,7 @@ SetWorkingDir %A_ScriptDir%
 ;------------------------------
 
 APPNAME			:= "extract-md"
-VERSION			:= "1.3"
+VERSION			:= "1.4"
 MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
@@ -124,7 +127,7 @@ OUTPUTBLOCK_SEP := ""
 FILE_SEP := "*******************"
 OUTPUTFILENAME := "output.md"
 PROJECTNAME := "project"
-
+AUTO_BR := 1 ;0 = off, 1 = on
 
 MainSub:
 
@@ -133,7 +136,7 @@ MainSub:
 	if( filesCount = 0)
 	{
 		;Msgbox with Exclamation mark (48)
-		MsgBox, 48, Error, Please drop a file on me!
+		MsgBox, 48, %APPNAME% %VERSION% - Error, Please drop a file on me!
 		ExitApp
 	}
 	
@@ -241,14 +244,13 @@ Return
 
 /*md*
 <div class="mdfunction">
-subroutine: *LoadSettings*
----------------------------
-> **syntax:** *LoadSettings*-b
-> **version:** 1.0
+##subroutine: *LoadSettings*
+> **syntax:** *LoadSettings*
+> **version:** 1.1
 
 *******************
 
-> **author:** Florian SCHMID-b
+> **author:** Florian SCHMID
 > **added in project version:** 1.0
 
 *******************
@@ -258,13 +260,13 @@ subroutine: *LoadSettings*
 ###returns
 
 ###description
-Loads custom user settings from INI-file.-b
+Loads custom user settings from INI-file.
 
 ###usage
 	Gosub LoadSettings
 
 ###info
-For more information about the INI format, look in the File description.-b
+For more information about the INI format, look in the File description.
 
 </div> 
 */
@@ -282,31 +284,32 @@ LoadSettings:
 	IniRead, CUSTOM_BR, %sINIFilename%, SETUP, CUSTOM_BR, %CUSTOM_BR%
 	IniRead, OUTPUTFILENAME, %sINIFilename%, SETUP, OUTPUT, %OUTPUTFILENAME%
 	IniRead, PROJECTNAME, %sINIFilename%, SETUP, PROJECT, %PROJECTNAME%
+	IniRead, AUTO_BR, %sINIFilename%, SETUP, AUTO_BR, %AUTO_BR%
+	
 Return
 
 
 
 /*md*
 <div class="mdfunction">
-function: *extractMD*
----------------------------
-> **syntax:** *extractMD( in_sFile) : string*-b
-> **version:** 1.2
+##function: *extractMD*
+> **syntax:** *extractMD( in_sFile) : string*
+> **version:** 1.3
 
 *******************
 
-> **author:** Florian SCHMID-b
+> **author:** Florian SCHMID
 > **added in project version:** 1.0
 
 *******************
 
 ###parameters
-* _[in]_ in_sFile : string-b
+* _[in]_ in_sFile : string
 The file containing the MD-code to extract.
 
 ###returns
-* string-b
-Returns the extracted MD-codeblock.-b
+* string
+Returns the extracted MD-codeblock.
 Removes the Start-, Line- and End-tags and also the custom BRs.
 
 ###description
@@ -328,6 +331,7 @@ extractMD( in_sFile )
 	global OUTPUTBLOCK_SEP
 	global CUSTOM_BR
 	global MARKDOWN_BR
+	global AUTO_BR
 	
 	FileRead, sFileContent, %in_sFile%
 	nLinetag_len := StrLen( TEXTBLOCK_LINE)
@@ -351,7 +355,6 @@ extractMD( in_sFile )
 			
 			if nPosEnd ;get md-block from STARTPOS to ENDPOS (without start/end tags)
 			{
-				nPosEnd := nPosEnd -StrLen( TEXTBLOCK_END)
 				nLength := nPosEnd - nPosStart
 				if( nLength) 
 				{
@@ -417,6 +420,16 @@ extractMD( in_sFile )
 						sLine := SubStr( sLine, 1, _length)
 						sLine :=  sLine . MARKDOWN_BR
 					}	
+					
+					;else
+					;-> add linebreak if AUTO-BR flag is set
+					else
+					{
+						if (AUTO_BR == 1)
+						{
+							sLine := sLine . MARKDOWN_BR
+						}
+					}
 				}
 			
 			;append line to textblock
@@ -430,6 +443,7 @@ extractMD( in_sFile )
 			sMDContent := sMDContent . "`n`n" . OUTPUTBLOCK_SEP . "`n`n"
 		
 			;find next block
+			nPosEnd := nPosEnd +StrLen( TEXTBLOCK_END)
 			nPosStart := InStr( sFileContent, TEXTBLOCK_START, false, nPosEnd)
 		} ;end while
 		
