@@ -1,6 +1,6 @@
 Version 1.4
 ===========
-Date of release: not released yet
+Date of release: 2012-10-22
 
 * added issue #10: auto-linebreak option.
 
