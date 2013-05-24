@@ -120,9 +120,9 @@ MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
 TEXTBLOCK_START := "/*md"
-TEXTBLOCK_LINE  :=""
-TEXTBLOCK_END   := "*/"
-CUSTOM_BR	:= "-b"
+TEXTBLOCK_LINE :=""
+TEXTBLOCK_END := "*/"
+CUSTOM_BR := "-b"
 OUTPUTBLOCK_SEP := ""
 FILE_SEP := "*******************"
 OUTPUTFILENAME := "output.md"
