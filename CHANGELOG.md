@@ -1,3 +1,9 @@
+Version 1.5
+===========
+Date of release: 2012-5-31
+
+* fixed issue #9: removed unnecessary emptylines and linebreaks from resulting output md-file.
+
 Version 1.4
 ===========
 Date of release: 2012-10-22

@@ -12,7 +12,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 file: *extract_md.ahk*
 ---------------------------
 > Type: _AutoHotkey_ (Version 1.0.48.05)
-> **file version:** 1.6
+> **file version:** 1.7
 > License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
@@ -20,11 +20,12 @@ file: *extract_md.ahk*
 > **project:** Extract Markdown (MD) code from files
 > **author:** Florian SCHMID
 > **company:** private
-> **version:** 1.4
+> **version:** 1.5
 
 *******************
 
 ###history
+* v1.5 2013-5-31: fixed issue #9: removed a lot of empty lines and linebreaks from the output md-file.
 * v1.4 2012-10-20: added: appname and versionno. to errormessage if no file dropped.
 * v1.4 2012-10-17: added issue #10: auto linebreak (AUTO_BR).
 * v1.4 2012-10-17: fixed issue #8: dont remove chars preceding BLOCK_END-tag.
@@ -115,7 +116,7 @@ SetWorkingDir %A_ScriptDir%
 ;------------------------------
 
 APPNAME			:= "extract-md"
-VERSION			:= "1.4"
+VERSION			:= "1.5"
 MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
@@ -188,7 +189,7 @@ MainSub:
 	;------------------------------
 	if( PROJECTNAME <> "") 
 	{
-		sContent = <h1 class="mdprojectname">%PROJECTNAME%</h1>`n
+		sContent = <h1 class="mdprojectname">%PROJECTNAME%</h1>`n<hr />`n
 	}
 
 	;------------------------------
@@ -201,7 +202,7 @@ MainSub:
 		sTemp := extractMD( sFilename)
 		
 		;add file-div (incl. referenced link)
-		sContent = %sContent%<div class="mdfilename">file: [%sFileNameNoPath%][filelink_%A_Index%]`n%sTemp%`n</div>`n%FILE_SEP%`n`n
+		sContent = %sContent%<div class="mdfilename">file: [%sFileNameNoPath%][filelink_%A_Index%]`n%sTemp%</div>`n%FILE_SEP%`n
 	}
 
 	;------------------------------
@@ -209,7 +210,7 @@ MainSub:
 	;------------------------------
 	;markdown link refers format: [filelink_X]: http://google.com/    "Google"
 	;
-	sLinks = 
+	sLinks := "" 
 	Loop %filesCount%  
 	{
 		sFilename :=  Files%A_Index%
@@ -220,11 +221,11 @@ MainSub:
 		StringReplace, sFilename, sFilename, %A_SPACE%, %sSpaceReplace%, All
 
 		; Create link-entry
-		sLinks = %sLinks%`n[filelink_%A_Index%]: file:///%sFilename%    "%sFileNameNoPath%"`n
-		
+		sLinks = %sLinks%`n[filelink_%A_Index%]: file:///%sFilename% "%sFileNameNoPath%"
 	}
-	sContent := sContent . "`n`n" . sLinks
-
+	if( sLinks != "" ) {
+		sContent := sContent . "`n" . sLinks
+	}
 
 
 	;------------------------------
@@ -338,12 +339,13 @@ extractMD( in_sFile )
 	nBreaktag_len := StrLen( CUSTOM_BR)
 	
 
-	sMDContent = 
+	sMDContent := "" 
 	
 	if not ErrorLevel  ; Successfully loaded.
 	{
 		;-------------------------------------
 		;loop as long as a MD block is found
+		; and collect all MD-Blocks in var sMDContent
 		;-------------------------------------
 		nPosStart := InStr( sFileContent, TEXTBLOCK_START, false, 1)
 		while nPosStart
@@ -351,7 +353,7 @@ extractMD( in_sFile )
 			
 			nPosStart := nPosStart +StrLen( TEXTBLOCK_START)
 			nPosEnd := InStr( sFileContent, TEXTBLOCK_END, false, nPosStart)
-			sNewBlock = 
+			sNewBlock := ""
 			
 			if nPosEnd ;get md-block from STARTPOS to ENDPOS (without start/end tags)
 			{
@@ -359,99 +361,113 @@ extractMD( in_sFile )
 				if( nLength) 
 				{
 					sNewBlock := SubStr( sFileContent, nPosStart, nLength) 
-					sMDContent := sMDContent . sNewBlock
+					sMDContent := sMDContent . sNewBlock . "`n"
 				}
 			}
 		
 			else ; or if no endtag found get everything from STARTPOS until end of file
 			{
 				sNewBlock := SubStr( sFileContent, nPosStart) 
-				sMDContent := sMDContent . sNewBlock
-				Return ""
+				sMDContent := sMDContent . sNewBlock . "`n"
 			}
 			
-			;-------------------------------------
-			; remove leading tags (=TEXTBLOCK_LINE)
-			; from each line
-			;
-			; loop line by line and remove BLOCK_LINEs 
-			; and replace CUSTOM_BR tags
-			;       %A_Index% : Line number 
-			;       %A_LoopField% : content
-			;-------------------------------------
-			sMDContent_new =
-			Loop, parse, sMDContent, `n, `r 
-			{
-				sLine := A_LoopField
-
-		
-				;check for: Line-tag
-				if nLinetag_len 
-				{
-					; first, remove leading whitespaces
-					; for this we append a character, use the [var1 = %var2%] method to remove leading/trailing spaces
-					; but because we have added a char at the end, it will only remove the leading spaces.
-					sLineNew := sLine . "x"
-					sLineNew = %sLineNew%
-
-					; extract characters (linetag-length)
-					sLineStart := SubStr( sLineNew, 1, nLinetag_len)
-					
-					; -> found Line-tag
-					if( sLineStart == TEXTBLOCK_LINE)
-					{
-						; remove Line-tag from the string with no whitespaces
-						sLine := SubStr( sLineNew, nLinetag_len +1)
-						; remove the appended char
-						sLine := SubStr( sLine, 1, -1)
-					}	
-				}
-			
-				;check for: custom BR-tag
-				if nBreaktag_len
-				{
-					_length := 1 - nBreaktag_len
-					sLineEnd := SubStr( sLine, _length)
-					
-					;-> found!
-					if( sLineEnd == CUSTOM_BR)
-					{
-						_length := StrLen( sLine) -nBreaktag_len
-						sLine := SubStr( sLine, 1, _length)
-						sLine :=  sLine . MARKDOWN_BR
-					}	
-					
-					;else
-					;-> add linebreak if AUTO-BR flag is set
-					else
-					{
-						if (AUTO_BR == 1)
-						{
-							sLine := sLine . MARKDOWN_BR
-						}
-					}
-				}
-			
-			;append line to textblock
-			sMDContent_new := sMDContent_new . "`n" . sLine	
-			} ;loop
-		
-			sMDContent := sMDContent_new
-			sMDContent_new =
-			
-			;append textblock to result
-			sMDContent := sMDContent . "`n`n" . OUTPUTBLOCK_SEP . "`n`n"
-		
 			;find next block
 			nPosEnd := nPosEnd +StrLen( TEXTBLOCK_END)
 			nPosStart := InStr( sFileContent, TEXTBLOCK_START, false, nPosEnd)
-		} ;end while
+			if( nPosStart) {
+				if( OUTPUTBLOCK_SEP != "") {
+					sMDContent := sMDContent . OUTPUTBLOCK_SEP . "`n"
+				}
+			}	
+			
+		} ;end: while block is found	
+	
+		;-------------------------------------
+		; remove leading tags (=TEXTBLOCK_LINE)
+		; from each line
+		;
+		; loop line by line and remove BLOCK_LINEs 
+		; and replace CUSTOM_BR tags
+		;
+		; Loop, Parse, InputVar [, Delimiters, OmitChars] 
+		;       %A_Index% : Line number 
+		;       %A_LoopField% : content
+		;-------------------------------------
+		sMDContent_new := ""
+		Loop, parse, sMDContent, `n, `r 
+		{
+			sLine := A_LoopField
+
+			;if emptyline, continue the loop
+			if (sLine = "")	{
+				sMDContent_new := sMDContent_new . "`n"
+				Continue
+			}	
+
+			;remove leading/trailing spaces to remove TAB etc
+			;when checking for empty line
+			sLineNew = %sLine%
+			if( sLineNew = "") {
+				Continue
+			}
+			
+			;check for: Line-tag
+			if (nLinetag_len > 0) {
+				; first, remove leading whitespaces
+				; for this we append a character, use the [var1 = %var2%] method to remove leading/trailing spaces
+				; but because we have added a char at the end, it will only remove the leading spaces.
+				sLineNew := sLine . "x"
+				sLineNew = %sLineNew%
+
+				; extract characters (linetag-length)
+				sLineStart := SubStr( sLineNew, 1, nLinetag_len)
+				
+				; -> found Line-tag
+				if( sLineStart == TEXTBLOCK_LINE)
+				{
+					; remove Line-tag from the string with no whitespaces
+					sLine := SubStr( sLineNew, nLinetag_len +1)
+					; remove the appended char
+					sLine := SubStr( sLine, 1, -1)
+				}	
+			}
+		
+			;check for: custom BR-tag
+			if (nBreaktag_len > 0) {
+				_length := 1 - nBreaktag_len
+				sLineEnd := SubStr( sLine, _length)
+				bCustomBRUsed := False
+				
+				;-> found!
+				if( sLineEnd == CUSTOM_BR) { ; "==" -> case-sensitive
+					_length := StrLen( sLine) -nBreaktag_len
+					sLine := SubStr( sLine, 1, _length)
+					sLine :=  sLine . MARKDOWN_BR
+					bCustomBRUsed := True
+				}	
+			}
+			
+			;-> add linebreak if AUTO-BR flag is set (and CUSTOM-BR was not used)
+			if( bCustomBRUsed = False and AUTO_BR = 1) {
+				sLine := sLine . MARKDOWN_BR
+			}
+		
+			;append line to textblock
+			sMDContent_new := sMDContent_new . sLine . "`n"	
+		} ;loop
+	
+		sMDContent := sMDContent_new
+		sMDContent_new := "" ;free memory
+		
+		;append textblock to result
+		sMDContent := sMDContent . OUTPUTBLOCK_SEP . "`n"
 		
 	
-		; Free the memory.
-		sFileContent =  
-	}	
-
-Return sMDContent
+		; Free the memory
+		sFileContent := ""
+		sMDContent_new := ""
+	}
+	
+	Return sMDContent
 } 
 ;end extractMD()
