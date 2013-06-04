@@ -1,4 +1,4 @@
-/*
+﻿/*
 The MIT License (MIT)
 Copyright (c) 2012 Florian Schmid "digitalfun"
 
@@ -11,8 +11,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <div class="mdfile">
 file: *extract_md.ahk*
 ---------------------------
-> Type: _AutoHotkey_ (Version 1.0.48.05)
+> Type: _AutoHotkey_ (Compiler Ahk2Exe Version 1.0.48.05)
 > **file version:** 1.7
+> **file encoding:** UTF-8
 > License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
@@ -20,12 +21,13 @@ file: *extract_md.ahk*
 > **project:** Extract Markdown (MD) code from files
 > **author:** Florian SCHMID
 > **company:** private
-> **version:** 1.5
+> **version:** 1.6
 
 *******************
 
-###history
-* v1.5 2013-5-31: fixed issue #9: removed a lot of empty lines and linebreaks from the output md-file.
+###history (yyyy.mm.dd)
+* v1.6 2013-06-04: insert some linebreaks because PANDOC had problems. (even though other converters worked)
+* v1.5 2013-05-31: fixed issue #9: removed a lot of empty lines and linebreaks from the output md-file.
 * v1.4 2012-10-20: added: appname and versionno. to errormessage if no file dropped.
 * v1.4 2012-10-17: added issue #10: auto linebreak (AUTO_BR).
 * v1.4 2012-10-17: fixed issue #8: dont remove chars preceding BLOCK_END-tag.
@@ -202,7 +204,7 @@ MainSub:
 		sTemp := extractMD( sFilename)
 		
 		;add file-div (incl. referenced link)
-		sContent = %sContent%<div class="mdfilename">file: [%sFileNameNoPath%][filelink_%A_Index%]`n%sTemp%</div>`n%FILE_SEP%`n
+		sContent = %sContent%<div class="mdfilename">file: [%sFileNameNoPath%][filelink_%A_Index%]`n`n%sTemp%</div>`n%FILE_SEP%`n
 	}
 
 	;------------------------------
@@ -361,14 +363,14 @@ extractMD( in_sFile )
 				if( nLength) 
 				{
 					sNewBlock := SubStr( sFileContent, nPosStart, nLength) 
-					sMDContent := sMDContent . sNewBlock . "`n"
+					sMDContent := sMDContent . "`n" . sNewBlock . "`n"
 				}
 			}
 		
 			else ; or if no endtag found get everything from STARTPOS until end of file
 			{
 				sNewBlock := SubStr( sFileContent, nPosStart) 
-				sMDContent := sMDContent . sNewBlock . "`n"
+				sMDContent := sMDContent . "`n" . sNewBlock . "`n"
 			}
 			
 			;find next block

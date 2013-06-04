@@ -1,3 +1,11 @@
+Version 1.6
+===========
+Date of release: 2012-6-4
+
+* fixed problem: PANDOC had problems and to fix it we need to add some linebreaks.
+* added executable.
+* file encoding converted to UTF-8.
+
 Version 1.5
 ===========
 Date of release: 2012-5-31
