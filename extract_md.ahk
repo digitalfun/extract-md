@@ -9,12 +9,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 /*md*
 <div class="mdfile">
-file: *extract_md.ahk*
----------------------------
+## file: *extract_md.ahk*
 > Type: _AutoHotkey_ (Compiler Ahk2Exe Version 1.0.48.05)
 > **file version:** 1.7
 > **file encoding:** UTF-8
-> License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
+> **License:** [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
 
