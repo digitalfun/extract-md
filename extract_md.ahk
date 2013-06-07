@@ -11,7 +11,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <div class="mdfile">
 ## file: *extract_md.ahk*
 > Type: _AutoHotkey_ (Compiler Ahk2Exe Version 1.0.48.05)
-> **file version:** 1.7
 > **file encoding:** UTF-8
 > **License:** [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
@@ -20,11 +19,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 > **project:** Extract Markdown (MD) code from files
 > **author:** Florian SCHMID
 > **company:** private
-> **version:** 1.6
+> **version:** 1.7
 
 *******************
 
 ###history (yyyy.mm.dd)
+* v1.7 2013-06-07: when no outputfilename is set in settings, use filename of dropped file instead
 * v1.6 2013-06-04: insert some linebreaks because PANDOC had problems. (even though other converters worked)
 * v1.5 2013-05-31: fixed issue #9: removed a lot of empty lines and linebreaks from the output md-file.
 * v1.4 2012-10-20: added: appname and versionno. to errormessage if no file dropped.
@@ -90,6 +90,7 @@ Tag that will be used to seperate 2 files in the output md-file.
  
 `OUTPUT`
 Default filename in the file-selection dialog.
+If left empty, then the filename of the first file in the dropped-file-list will be used instead.
  *standard value:* output.md 
  
 
@@ -117,7 +118,7 @@ SetWorkingDir %A_ScriptDir%
 ;------------------------------
 
 APPNAME			:= "extract-md"
-VERSION			:= "1.6"
+VERSION			:= "1.7"
 MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
@@ -138,11 +139,23 @@ MainSub:
 	if( filesCount = 0)
 	{
 		;Msgbox with Exclamation mark (48)
-		MsgBox, 48, %APPNAME% %VERSION% - Error, Please drop a file on me!
+		MsgBox, 48, %APPNAME% %VERSION% - Error, Please drop a file!
 		ExitApp
 	}
 	
 	Gosub LoadSettings
+
+	;------------------------------
+	; store the full path+filename of the dropped file(s)
+	; into array "Files"
+	;------------------------------
+	Loop %filesCount%  ; For each parameter (or file dropped onto a script):
+	{
+		GivenPath := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
+		Loop %GivenPath%, 1
+			LongPath = %A_LoopFileLongPath%
+		Files%A_Index% := LongPath
+	}
 
 	;------------------------------
 	; User input: Projectname
@@ -162,6 +175,15 @@ MainSub:
 	;------------------------------
 	; User input: filename 
 	;------------------------------
+	
+	;if not filename set in settings,
+	;use name of the first file in the list of dropped files
+	if( OUTPUTFILENAME = "") {
+		OUTPUTFILENAME := Files1
+		SplitPath, OUTPUTFILENAME, , , , sOutNameNoExt
+		OUTPUTFILENAME := sOutNameNoExt . ".md"
+	}	
+	
 	InputBox, UserInput, %APPNAME% %VERSION%, Please enter the filename of the outputfile:,,,,,,,,%OUTPUTFILENAME%
 	if ErrorLevel ;clicked [CANCEL]
 	{
@@ -170,20 +192,10 @@ MainSub:
 	
 	else ; clicked [OK]
 	{
-		OUTPUTFILENAME := UserInput		
+		OUTPUTFILENAME := UserInput
 	}
 
-	;------------------------------
-	; store the full path+filename of the dropped file(s)
-	; into array "Files"
-	;------------------------------
-	Loop %filesCount%  ; For each parameter (or file dropped onto a script):
-	{
-		GivenPath := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
-		Loop %GivenPath%, 1
-			LongPath = %A_LoopFileLongPath%
-		Files%A_Index% := LongPath
-	}
+
 
 	;------------------------------
 	; add header H1 "Projectname"

@@ -1,3 +1,10 @@
+Version 1.7
+===========
+Date of release: 2013-06-07
+
+* Error message for "no file dropped" changed slightly
+* when no outputfilename is set in settings.ini, suggest the filename of the first file in the dropped-file-list instead
+
 Version 1.6
 ===========
 Date of release: 2012-6-4
