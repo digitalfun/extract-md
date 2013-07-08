@@ -19,11 +19,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 > **project:** Extract Markdown (MD) code from files
 > **author:** Florian SCHMID
 > **company:** private
-> **version:** 1.7
+> **version:** 1.8
 
 *******************
 
 ###history (yyyy.mm.dd)
+
+* v1.8 2013-07-05: removed block-level-HTML-tags (table,div,p...) because it is **not** supported by the official Markdown-Syntax! 
+
+ > _"Note that Markdown formatting syntax is not processed within block-level HTML tags. 
+ > E.g., you can’t use Markdown-style \*emphasis\* inside an HTML block."_
+
 * v1.7 2013-06-07: when no outputfilename is set in settings, use filename of dropped file instead
 * v1.6 2013-06-04: insert some linebreaks because PANDOC had problems. (even though other converters worked)
 * v1.5 2013-05-31: fixed issue #9: removed a lot of empty lines and linebreaks from the output md-file.
@@ -118,7 +124,7 @@ SetWorkingDir %A_ScriptDir%
 ;------------------------------
 
 APPNAME			:= "extract-md"
-VERSION			:= "1.7"
+VERSION			:= "1.8"
 MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
@@ -215,7 +221,7 @@ MainSub:
 		sTemp := extractMD( sFilename)
 		
 		;add file-div (incl. referenced link)
-		sContent = %sContent%<div class="mdfilename">file: [%sFileNameNoPath%][filelink_%A_Index%]`n`n%sTemp%</div>`n%FILE_SEP%`n
+		sContent = %sContent%file: [%sFileNameNoPath%][filelink_%A_Index%]`n%sTemp%`n%FILE_SEP%`n
 	}
 
 	;------------------------------
