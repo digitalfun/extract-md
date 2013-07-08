@@ -8,7 +8,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 /*md*
-<div class="mdfile">
 ## file: *extract_md.ahk*
 > Type: _AutoHotkey_ (Compiler Ahk2Exe Version 1.0.48.05)
 > **file encoding:** UTF-8
@@ -43,13 +42,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 initial release
 
 ###description
-Scriptlanguage: [AutoHotkey](http://www.autohotkey.com/ "AutoHotkey homepage").
+
+**Language:** [AutoHotkey script](http://www.autohotkey.com/ "AutoHotkey homepage").
 
 The aim of this tool is to extract [Markdown][link_md] textblocks
 from files and merge them into a single file.
 The file can then be processed by a tool like [Pandoc][link_pandoc] to convert it from Markdown into a HTML page for example.
 
 ###Usage
+
 1. Setup the INI-file to fit your needs 
 2. drag and drop the file(s) onto the .exe 
 3. enter the name of the project (= level 1 header) 
@@ -57,8 +58,10 @@ The file can then be processed by a tool like [Pandoc][link_pandoc] to convert i
 
 
 ####The INI-Configuration file
+
+> Filename: *\<Name of .exe or .ahk file>.ini* 
+
 The **INI-File** looks like this:
-**Filename:** *\<Name of .exe or .ahk file>.ini* 
 
 	[SETUP]
 	BLOCK_START=<string>
@@ -70,6 +73,7 @@ The **INI-File** looks like this:
 	OUTPUT=<filename>
 
 #####Details
+
 `BLOCK_START` 
 Tag to identify the **start** of a block. 
  *standard value:* &#47;\*md
@@ -99,11 +103,9 @@ Default filename in the file-selection dialog.
 If left empty, then the filename of the first file in the dropped-file-list will be used instead.
  *standard value:* output.md 
  
-
 [link_md]: http://daringfireball.net/projects/markdown/ "Markdown Homepage"
 [link_pandoc]: http://johnmacfarlane.net/pandoc/ "Pandoc Homepage"
 
-</div>
 */
 
 
