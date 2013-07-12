@@ -265,7 +265,6 @@ Return
 
 
 /*md*
-<div class="mdfunction">
 ##subroutine: *LoadSettings*
 > **syntax:** *LoadSettings*
 > **version:** 1.1
@@ -289,8 +288,6 @@ Loads custom user settings from INI-file.
 
 ###info
 For more information about the INI format, look in the File description.
-
-</div> 
 */
 
 LoadSettings:
@@ -313,7 +310,6 @@ Return
 
 
 /*md*
-<div class="mdfunction">
 ##function: *extractMD*
 > **syntax:** *extractMD( in_sFile) : string*
 > **version:** 1.3
@@ -342,7 +338,6 @@ sMD contains the extracted MD-codeblock.
 
 ###info
 
-</div>
 */
 extractMD( in_sFile ) 
 {
