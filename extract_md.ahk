@@ -8,7 +8,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 /*md*
-<div class="mdfile">
 ## file: *extract_md.ahk*
 > Type: _AutoHotkey_ (Compiler Ahk2Exe Version 1.0.48.05)
 > **file encoding:** UTF-8
@@ -19,11 +18,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 > **project:** Extract Markdown (MD) code from files
 > **author:** Florian SCHMID
 > **company:** private
-> **version:** 1.7
+> **version:** 1.8
 
 *******************
 
 ###history (yyyy.mm.dd)
+
+* v1.8 2013-07-05: removed block-level-HTML-tags (table,div,p...) because it is **not** supported by the official Markdown-Syntax! 
+
+ > _"Note that Markdown formatting syntax is not processed within block-level HTML tags. 
+ > E.g., you can’t use Markdown-style \*emphasis\* inside an HTML block."_
+
 * v1.7 2013-06-07: when no outputfilename is set in settings, use filename of dropped file instead
 * v1.6 2013-06-04: insert some linebreaks because PANDOC had problems. (even though other converters worked)
 * v1.5 2013-05-31: fixed issue #9: removed a lot of empty lines and linebreaks from the output md-file.
@@ -37,13 +42,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 initial release
 
 ###description
-Scriptlanguage: [AutoHotkey](http://www.autohotkey.com/ "AutoHotkey homepage").
+
+**Language:** [AutoHotkey script](http://www.autohotkey.com/ "AutoHotkey homepage").
 
 The aim of this tool is to extract [Markdown][link_md] textblocks
 from files and merge them into a single file.
 The file can then be processed by a tool like [Pandoc][link_pandoc] to convert it from Markdown into a HTML page for example.
 
 ###Usage
+
 1. Setup the INI-file to fit your needs 
 2. drag and drop the file(s) onto the .exe 
 3. enter the name of the project (= level 1 header) 
@@ -51,8 +58,10 @@ The file can then be processed by a tool like [Pandoc][link_pandoc] to convert i
 
 
 ####The INI-Configuration file
+
+> Filename: *\<Name of .exe or .ahk file>.ini* 
+
 The **INI-File** looks like this:
-**Filename:** *\<Name of .exe or .ahk file>.ini* 
 
 	[SETUP]
 	BLOCK_START=<string>
@@ -64,6 +73,7 @@ The **INI-File** looks like this:
 	OUTPUT=<filename>
 
 #####Details
+
 `BLOCK_START` 
 Tag to identify the **start** of a block. 
  *standard value:* &#47;\*md
@@ -93,11 +103,9 @@ Default filename in the file-selection dialog.
 If left empty, then the filename of the first file in the dropped-file-list will be used instead.
  *standard value:* output.md 
  
-
 [link_md]: http://daringfireball.net/projects/markdown/ "Markdown Homepage"
 [link_pandoc]: http://johnmacfarlane.net/pandoc/ "Pandoc Homepage"
 
-</div>
 */
 
 
@@ -118,7 +126,7 @@ SetWorkingDir %A_ScriptDir%
 ;------------------------------
 
 APPNAME			:= "extract-md"
-VERSION			:= "1.7"
+VERSION			:= "1.8"
 MARKDOWN_BR 	:= "  "
 
 ;these settings may be overwritten by the INI-file settings.
@@ -215,7 +223,7 @@ MainSub:
 		sTemp := extractMD( sFilename)
 		
 		;add file-div (incl. referenced link)
-		sContent = %sContent%<div class="mdfilename">file: [%sFileNameNoPath%][filelink_%A_Index%]`n`n%sTemp%</div>`n%FILE_SEP%`n
+		sContent = %sContent%file: [%sFileNameNoPath%][filelink_%A_Index%]`n%sTemp%`n%FILE_SEP%`n
 	}
 
 	;------------------------------
@@ -257,7 +265,6 @@ Return
 
 
 /*md*
-<div class="mdfunction">
 ##subroutine: *LoadSettings*
 > **syntax:** *LoadSettings*
 > **version:** 1.1
@@ -281,8 +288,6 @@ Loads custom user settings from INI-file.
 
 ###info
 For more information about the INI format, look in the File description.
-
-</div> 
 */
 
 LoadSettings:
@@ -305,7 +310,6 @@ Return
 
 
 /*md*
-<div class="mdfunction">
 ##function: *extractMD*
 > **syntax:** *extractMD( in_sFile) : string*
 > **version:** 1.3
@@ -334,7 +338,6 @@ sMD contains the extracted MD-codeblock.
 
 ###info
 
-</div>
 */
 extractMD( in_sFile ) 
 {
