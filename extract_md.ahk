@@ -1,6 +1,6 @@
 ﻿/*
 The MIT License (MIT)
-Copyright (c) 2012 Florian Schmid "digitalfun"
+Copyright (c) 2012 Florian Schmid aka "digitalfun"
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -8,21 +8,23 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 /*md*
-## file: *extract_md.ahk*
-> Type: _AutoHotkey_ (Compiler Ahk2Exe Version 1.0.48.05)
-> **file encoding:** UTF-8
-> **License:** [MIT](http://www.opensource.org/licenses/mit-license.php/)
+# file: *extract_md.ahk*
+> Type: AutoHotkey Script _(Compiler used: Ahk2Exe Version 1.0.48.05)_
+> file encoding: UTF-8
+> License: [MIT](http://www.opensource.org/licenses/mit-license.php/)
 
 *******************
 
-> **project:** Extract Markdown (MD) code from files
-> **author:** Florian SCHMID
-> **company:** private
-> **version:** 1.8
+> project: Extract Markdown (MD) code from files
+> author: Florian SCHMID
+> company: private
+> version: 1.8
 
 *******************
 
-###history (yyyy.mm.dd)
+##history 
+
+> format: _vX.Y yyyy.mm.dd: DESCRIPTION_
 
 * v1.8 2013-07-05: removed block-level-HTML-tags (table,div,p...) because it is **not** supported by the official Markdown-Syntax! 
 
@@ -41,7 +43,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 * v1.0 2012-05-16: initial
 initial release
 
-###description
+##description
 
 **Language:** [AutoHotkey script](http://www.autohotkey.com/ "AutoHotkey homepage").
 
@@ -49,7 +51,7 @@ The aim of this tool is to extract [Markdown][link_md] textblocks
 from files and merge them into a single file.
 The file can then be processed by a tool like [Pandoc][link_pandoc] to convert it from Markdown into a HTML page for example.
 
-###Usage
+##Usage
 
 1. Setup the INI-file to fit your needs 
 2. drag and drop the file(s) onto the .exe 
@@ -57,7 +59,7 @@ The file can then be processed by a tool like [Pandoc][link_pandoc] to convert i
 4. enter the name of the output-file 
 
 
-####The INI-Configuration file
+###The INI-Configuration file
 
 > Filename: *\<Name of .exe or .ahk file>.ini* 
 
@@ -72,7 +74,7 @@ The **INI-File** looks like this:
 	FILE_SEP=<string>
 	OUTPUT=<filename>
 
-#####Details
+####Details
 
 `BLOCK_START` 
 Tag to identify the **start** of a block. 
