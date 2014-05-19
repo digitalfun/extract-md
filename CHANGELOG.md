@@ -1,3 +1,13 @@
+Version 1.8
+===========
+Date of release: 2013-10-31
+
+* removed block-level-HTML-tags (table,div,p...) because it is **not** supported by the official [Markdown-Syntax](http://daringfireball.net/projects/markdown/syntax)! 
+ 
+ > **Markdown syntax:**
+ > _"Note that Markdown formatting syntax is not processed within block-level HTML tags. 
+ > E.g., you can’t use Markdown-style \*emphasis\* inside an HTML block."_
+ 
 Version 1.7
 ===========
 Date of release: 2013-06-07

@@ -51,9 +51,9 @@ If this tag is found, it will be replaced with 2 space-characters. (inducing a l
 
 `AUTO_BR`   
 If this is set to __1__, it will add a line-break at the end of every line.  
-__0__ : option disabled  
-__1__ : option enabled  
-__known issues:__ The Heading "=====" and "------" will not work anymore. Use "#" and "##" instead.  
+**0** : option disabled  
+**1** : option enabled  
+**known issues** : With this option enabled, The LaTex-Style heading `"====="` and `"------"` will not work anymore. Use `"#"` and `"##"` instead.  
  *standard value:* 1   
 
 `BLOCK_SEP`   
