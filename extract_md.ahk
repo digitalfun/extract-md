@@ -363,15 +363,19 @@ extractMD( in_sFile )
 	global CUSTOM_BR
 	global MARKDOWN_BR
 	global AUTO_BR
+
+	nLinetag_len := StrLen(TEXTBLOCK_LINE)
+	nBreaktag_len := StrLen(CUSTOM_BR)
+
+	StartPos := 0
+	FileContent := "" 
+	MDContent := "" 
+	MDContent_new := ""
 	
 	; @DEBUG -> make functions:
 	; 1. extract all text between start- and end-tags
 	; 2. loop line by line: 
 
-	FileRead, sFileContent, %in_sFile%
-	nLinetag_len := StrLen( TEXTBLOCK_LINE)
-	nBreaktag_len := StrLen( CUSTOM_BR)
-	
 
 
 
@@ -382,7 +386,6 @@ extractMD( in_sFile )
 	{
 		return "ERROR"
 	}
-	sMDContent := "" 
 	
 	;----------------------------------------------------
 	; LOOP
@@ -393,7 +396,6 @@ extractMD( in_sFile )
 	;-------------------------------------------------------
 	StartPos := InStr(FileContent, TEXTBLOCK_START, false, 1)
 	while StartPos
-	if not ErrorLevel  ; Successfully loaded.
 	{
 		
 		StartPos := StartPos +StrLen(TEXTBLOCK_START) ;advance position to exclude the start-tag (we only want the content between the tags)
@@ -402,80 +404,38 @@ extractMD( in_sFile )
 		;get md-block from STARTPOS to ENDPOS (without start/end tags)
 		if EndPos 
 		{
-			
-			nPosStart := nPosStart +StrLen( TEXTBLOCK_START)
-			nPosEnd := InStr( sFileContent, TEXTBLOCK_END, false, nPosStart)
-			sNewBlock := ""
-			
-			if nPosEnd ;get md-block from STARTPOS to ENDPOS (without start/end tags)
+			nLength := EndPos - StartPos
+			if( nLength) 
 			{
-				nLength := nPosEnd - nPosStart
-				if( nLength) 
-				{
-					sNewBlock := SubStr( sFileContent, nPosStart, nLength) 
-					sMDContent := sMDContent . "`n" . sNewBlock . "`n"
-				}
+				sNewBlock := SubStr( FileContent, StartPos, nLength) 
+				MDContent := MDContent . "`n" . sNewBlock . "`n"
 			}
+		}
+
 		; or if no endtag found get everything from STARTPOS until end of file
 		else
+		{
+			sNewBlock := SubStr( FileContent, StartPos) 
+			MDContent := MDContent . "`n" . sNewBlock . "`n"
+		}
 		
 		;find next block
 		EndPos := EndPos +StrLen( TEXTBLOCK_END)
 		StartPos := InStr( FileContent, TEXTBLOCK_START, false, EndPos)
 		if StartPos
-			else ; or if no endtag found get everything from STARTPOS until end of file
-			{
-				sNewBlock := SubStr( sFileContent, nPosStart) 
-				sMDContent := sMDContent . "`n" . sNewBlock . "`n"
-			}
-			
-			;find next block
-			nPosEnd := nPosEnd +StrLen( TEXTBLOCK_END)
-			nPosStart := InStr( sFileContent, TEXTBLOCK_START, false, nPosEnd)
-			if( nPosStart) {
-				if( OUTPUTBLOCK_SEP != "") {
-					sMDContent := sMDContent . OUTPUTBLOCK_SEP . "`n"
-				}
-			}	
-			
-		} ;end: while block is found	
-	
 		{
-			sLine := A_LoopField
-
-			;if emptyline, continue the loop
-			if (sLine = "")	{
-				sMDContent_new := sMDContent_new . "`n"
-				Continue
-			}	
-
-			;remove leading/trailing spaces to remove TAB etc
-			;when checking for empty line
-			sLineNew = %sLine%
-			if( sLineNew = "") {
-				Continue
+			if( OUTPUTBLOCK_SEP != "") {
+				MDContent := MDContent . OUTPUTBLOCK_SEP . "`n"
 			}
-			
-			;check for: Line-tag
-			if (nLinetag_len > 0) {
-				; first, remove leading whitespaces
-				; for this we append a character, use the [var1 = %var2%] method to remove leading/trailing spaces
-				; but because we have added a char at the end, it will only remove the leading spaces.
-				sLineNew := sLine . "x"
-				sLineNew = %sLineNew%
+		}	
 
-				; extract characters (linetag-length)
-				sLineStart := SubStr( sLineNew, 1, nLinetag_len)
-				
-				; -> found Line-tag
-				if( sLineStart == TEXTBLOCK_LINE)
-				{
-					; remove Line-tag from the string with no whitespaces
-					sLine := SubStr( sLineNew, nLinetag_len +1)
-					; remove the appended char
-					sLine := SubStr( sLine, 1, -1)
-				}	
-			}
+		sNewBlock := "" ; free memory
+	} ;end: while block is found	
+
+	FileContent = ;free memory
+
+
+
 
 	;-------------------------------------
 	; remove leading tags (=TEXTBLOCK_LINE)
@@ -491,43 +451,78 @@ extractMD( in_sFile )
 	;       %A_Index% : Line number 
 	;       %A_LoopField% : content
 	;-------------------------------------
+	MDContent_new := ""
+	loop, parse, MDContent, `n, `r 
+	{
+		sLine := A_LOOPFIELD
+
+		;remove leading/trailing spaces to remove TAB etc
+		;when checking for empty line
+		sLineNew = %sLine%
 		
-			;check for: custom BR-tag
-			if (nBreaktag_len > 0) {
-				_length := 1 - nBreaktag_len
-				sLineEnd := SubStr( sLine, _length)
-				bCustomBRUsed := False
-				
-				;-> found!
-				if( sLineEnd == CUSTOM_BR) { ; "==" -> case-sensitive
-					_length := StrLen( sLine) -nBreaktag_len
-					sLine := SubStr( sLine, 1, _length)
-					sLine :=  sLine . MARKDOWN_BR
-					bCustomBRUsed := True
-				}	
-			}
+		;CONTINUTE LOOP CONDITION: line is empty 
+		;->add newline char and continue loop
+		if (sLineNew = "")	{
+			MDContent_new := MDContent_new . "`n"
+			continue
+		}	
+
+		
+		;check for: Line-tag
+		if (nLinetag_len > 0) {
+			; first, remove leading whitespaces
+			; for this we append a character, use the [var1 = %var2%] method to remove leading/trailing spaces
+			; but because we have added a char at the end, it will only remove the leading spaces.
+			sLineNew := sLine . "x"
+			sLineNew = %sLineNew%
+
+			; extract characters (linetag-length)
+			sLineStart := SubStr( sLineNew, 1, nLinetag_len)
 			
-			;-> add linebreak if AUTO-BR flag is set (and CUSTOM-BR was not used)
-			if( bCustomBRUsed = False and AUTO_BR = 1) {
-				sLine := sLine . MARKDOWN_BR
-			}
-		
-			;append line to textblock
-			sMDContent_new := sMDContent_new . sLine . "`n"	
-		} ;loop
+			; -> found Line-tag
+			if( sLineStart == TEXTBLOCK_LINE)
+			{
+				; remove Line-tag from the string with no whitespaces
+				sLine := SubStr( sLineNew, nLinetag_len +1)
+				; remove the appended char
+				sLine := SubStr( sLine, 1, -1)
+			}	
+		}
 	
-		sMDContent := sMDContent_new
-		sMDContent_new := "" ;free memory
+		;check for: custom BR-tag
+		if (nBreaktag_len > 0) {
+			_length := 1 - nBreaktag_len
+			sLineEnd := SubStr( sLine, _length)
+			bCustomBRUsed := false
+			
+			;-> found!
+			if( sLineEnd == CUSTOM_BR) { ; "==" -> case-sensitive
+				_length := StrLen( sLine) -nBreaktag_len
+				sLine := SubStr( sLine, 1, _length)
+				sLine :=  sLine . MARKDOWN_BR
+				bCustomBRUsed := True
+			}	
+		}
 		
-		;append textblock to result
-		sMDContent := sMDContent . OUTPUTBLOCK_SEP . "`n"
-		
+		;-> add linebreak if AUTO-BR flag is set (and CUSTOM-BR was not used)
+		if( bCustomBRUsed = false and AUTO_BR = 1) {
+			sLine := sLine . MARKDOWN_BR
+		}
 	
-		; Free the memory
-		sFileContent := ""
-		sMDContent_new := ""
-	}
+		;append line to textblock
+		MDContent_new := MDContent_new . sLine . "`n"	
+	} ;loop content line-by-line
+
+	MDContent := MDContent_new
+	MDContent_new := "" ;free memory
 	
-	Return sMDContent
+	;append textblock to result
+	MDContent := MDContent . OUTPUTBLOCK_SEP . "`n"
+	
+
+	; Free the memory
+	MDContent_new := ""
+
+	return sMDContent
 } 
 ;end extractMD()
