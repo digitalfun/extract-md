@@ -207,10 +207,9 @@ MainSub:
 	;------------------------------
 	Loop %filesCount%  ; For each parameter (or file dropped onto a script):
 	{
-		GivenPath := %A_Index%  ; Fetch the contents of the variable whose name is contained in A_Index.
+		GivenPath := %A_INDEX%  ; Fetch the contents of the variable whose name is contained in A_INDEX.
 		Loop %GivenPath%, 1
-			LongPath = %A_LoopFileLongPath%
-		Files%A_Index% := LongPath
+			Files%A_Index% := A_LoopFileLongPath
 	}
 
 	;------------------------------
@@ -300,7 +299,7 @@ MainSub:
 	;------------------------------
 	; create the outputfile
 	;------------------------------
-	sFilename :=  Files1
+	sFilename := Files1
 	SplitPath, sFilename, , sFileDir
 	sFileMD := sFileDir . "\" . OUTPUTFILENAME
 	FileDelete, %sFileMD%
@@ -331,16 +330,21 @@ LoadSettings:
 	IniRead, AUTO_BR, %sINIFilename%, SETUP, AUTO_BR, %AUTO_BR%	
 Return
 
+
+
+
+
 /*md## function `extractMD ( in_sFile : string ) : string`
+
 Extract Markdown-blocks from a given file.
 
 ### parameters
 
 `in_sFile : string`  
-The filename of the file that contains the MD-codeblocks to extract.
+The filename of the file that contains the MD-blocks to extract.
 
 ### return `string`
-The extracted block.
+All the extracted blocks concenated.
 
 ### remarks
 - Removes the Start-, Line- and End-tags
@@ -353,7 +357,7 @@ sMD contains the extracted MD-blocks.
 ### related
 _none_
 */
-extractMD( in_sFile ) 
+extractMD(in_sFile) 
 {
 	global TEXTBLOCK_START
 	global TEXTBLOCK_LINE
@@ -364,19 +368,28 @@ extractMD( in_sFile )
 	global MARKDOWN_BR
 	global AUTO_BR
 
-	nLinetag_len := StrLen(TEXTBLOCK_LINE)
-	nBreaktag_len := StrLen(CUSTOM_BR)
+	;locals
+	ErrorCode = 
+	nLinetag_len := StrLen(TEXTBLOCK_LINE) ;@DEBUG needed?
+	nBreaktag_len := StrLen(CUSTOM_BR) ;@DEBUG needed?
 
-	StartPos := 0
-	FileContent := "" 
-	MDContent := "" 
-	MDContent_new := ""
+	StartPos := 0  ;@DEBUG needed?
+	FileContent := ""   ;@DEBUG needed?
+	BlockContent := "" 
 	
 	; @DEBUG -> make functions:
 	; 1. extract all text between start- and end-tags
+	;    -> ExtractBlock ( in_FileName, ByRef out_Block) : int (errorcode)
+	;
+	; from AutoHotKey-help:
+	; > When passing large strings to a function, **ByRef** enhances performance 
+	; > and conserves memory by avoiding the need to make a copy of the string.
+	; > Similarly, using ByRef to send a long string back to the caller 
+	; > usually performs better than something like Return HugeString.
+	;
+	;
 	; 2. loop line by line: 
-
-
+	; ...
 
 
 	; load content from file
@@ -438,21 +451,18 @@ extractMD( in_sFile )
 
 
 	;-------------------------------------
-	; remove leading tags (=TEXTBLOCK_LINE)
-	; from each line
-	;
 	; parse line by line:
 	; - remove BLOCK_LINEs 
 	; - replace CUSTOM_BR tags with markdown line-break (2 space characters)
 	;
 	; INFO
 	;-------
-	; Loop, Parse, InputVar [, Delimiters, OmitChars] 
-	;       %A_Index% : Line number 
-	;       %A_LoopField% : content
+	; ``Loop, Parse, InputVar, Delimiters, OmitChars``
+	;       ``%A_Index%`` : Line number 
+	;       ``%A_LoopField%`` : content
 	;-------------------------------------
 	MDContent_new := ""
-	loop, parse, MDContent, `n, `r 
+	loop, parse, BlockContent, `n, `r 
 	{
 		sLine := A_LOOPFIELD
 
